@@ -12,6 +12,7 @@ import functools
 import io
 from lxml import etree
 from docx import Document
+from docx.shared import Inches, Cm
 from docx.opc.oxml import parse_xml
 from docx.opc.part import XmlPart
 import docx.oxml.ns
@@ -750,6 +751,14 @@ class DocxTemplate(object):
         if not self.is_saved and not self.is_rendered:
             self.docx = Document(self.template_file)
         self.pre_processing()
+
+        sections = self.docx.sections
+        for section in sections:
+            section.top_margin = Inches(0.5)
+            section.bottom_margin = Inches(0.5)
+            section.left_margin = Inches(1)
+            section.right_margin = Inches(1)
+        
         self.docx.save(filename, *args, **kwargs)
         self.post_processing(filename)
         self.is_saved = True
